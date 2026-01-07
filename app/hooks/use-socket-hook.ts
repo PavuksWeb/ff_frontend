@@ -19,8 +19,11 @@ export function useSocket(url: string, onMessage: (msg: Message) => void) {
     });
 
     socket.on('moderation_error', (err) => {
-      console.error('Moderation error:', err);
       alert(err.code);
+      onMessage({
+        role: 'assistant',
+        message: '❌ The message has not passed moderation.',
+      });
     });
 
     socket.on('message_created', (data: Message) => {
