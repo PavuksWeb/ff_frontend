@@ -26,6 +26,14 @@ export function useSocket(url: string, onMessage: (msg: Message) => void) {
       });
     });
 
+    socket.on('ws_error', (err) => {
+      alert(err.message);
+      onMessage({
+        role: 'assistant',
+        message: '❌ The message has not passed moderation.',
+      });
+    });
+
     socket.on('message_created', (data: Message) => {
       onMessage(data);
     });
