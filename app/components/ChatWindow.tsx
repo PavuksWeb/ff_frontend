@@ -2,6 +2,7 @@
 
 import { FC, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
+import { Spinner } from '@/components/ui/spinner';
 
 interface ChatWindowProps {
   messages: Message[];
@@ -9,6 +10,9 @@ interface ChatWindowProps {
 
 const ChatWindow: FC<ChatWindowProps> = ({ messages }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const showSpinner =
+    messages.length > 0 && messages[messages.length - 1].role === undefined;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -19,6 +23,14 @@ const ChatWindow: FC<ChatWindowProps> = ({ messages }) => {
       {messages.map((msg, i) => (
         <ChatMessage message={msg.message} role={msg.role} key={i} />
       ))}
+
+      {showSpinner && (
+        <div className="flex justify-start mt-2">
+          <div className="flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-xl">
+            <Spinner />
+          </div>
+        </div>
+      )}
       <div ref={bottomRef} />
     </div>
   );

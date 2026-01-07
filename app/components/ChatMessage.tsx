@@ -6,16 +6,18 @@ interface ChatMessageProps {
 }
 
 const ChatMessage: FC<ChatMessageProps> = ({ message, role }) => {
-  console.log(role);
-
   return (
     <div
       className={`flex ${
         role === 'assistant' ? 'justify-start' : 'justify-end'
-      } mb-2`}
+      } mb-4`}
     >
       <div
-        className={`p-3 rounded-xl max-w-xs wrap-break-word bg-blue-500 text-white`}
+        className={`p-3 rounded-xl max-w-xs wrap-break-word ${
+          role === 'assistant'
+            ? 'bg-gray-200 text-black'
+            : 'bg-blue-500 text-white'
+        }`}
       >
         {message}
       </div>
