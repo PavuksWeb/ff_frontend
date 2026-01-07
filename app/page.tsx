@@ -6,7 +6,12 @@ import ChatInput from './components/ChatInput';
 import { useSocket } from './hooks/use-socket-hook';
 
 export default function Page() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      message: 'Wanna talk, sweetie?)',
+    },
+  ]);
 
   const { sendMessage } = useSocket(
     'http://3.75.95.35:3000',
