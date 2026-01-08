@@ -3,6 +3,7 @@
 import { FC, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import { Spinner } from '@/components/ui/spinner';
+import { Message } from '../types/message';
 
 interface ChatWindowProps {
   messages: Message[];

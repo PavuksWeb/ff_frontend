@@ -4,27 +4,42 @@ import { useState } from 'react';
 import ChatWindow from './components/ChatWindow';
 import ChatInput from './components/ChatInput';
 import { useSocket } from './hooks/use-socket-hook';
+import { Role } from './enums/role';
+import { Message } from './types/message';
 
 export default function Page() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant',
+      role: Role.assistant,
       message: 'Wanna talk, sweetie?)',
     },
   ]);
 
   const { sendMessage } = useSocket(
     process.env.NEXT_PUBLIC_API_URL as string,
-    (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
+    (msg: Message, isNew: boolean) => {
+      setMessages((prev) => {
+        if (isNew) {
+          // Добавляем новое сообщение в список
+          return [...prev, msg];
+        } else {
+          // Находим последнее сообщение и дополняем его текст
+          const lastMessage = prev[prev.length - 1];
+          const updatedLast = {
+            ...lastMessage,
+            message: lastMessage.message + msg.message,
+          };
+          return [...prev.slice(0, -1), updatedLast];
+        }
+      });
     }
   );
 
   const handleSend = (message: string) => {
-    const userMessage: Message = { message };
+    const userMessage: Message = { message, role: Role.user };
     setMessages((prev) => [...prev, userMessage]);
 
-    sendMessage(message);
+    sendMessage(message, Role.user);
   };
 
   return (
