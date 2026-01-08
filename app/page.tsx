@@ -14,7 +14,7 @@ export default function Page() {
   ]);
 
   const { sendMessage } = useSocket(
-    'http://3.75.95.35:3000',
+    process.env.NEXT_PUBLIC_API_URL as string,
     (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
     }

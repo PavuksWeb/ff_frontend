@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { toast } from 'sonner';
 
 export function useSocket(url: string, onMessage: (msg: Message) => void) {
   const socketRef = useRef<Socket | null>(null);
@@ -18,16 +19,16 @@ export function useSocket(url: string, onMessage: (msg: Message) => void) {
       console.log('WS disconnected');
     });
 
-    socket.on('moderation_error', (err) => {
-      alert(err.code);
-      onMessage({
-        role: 'assistant',
-        message: '❌ The message has not passed moderation.',
-      });
-    });
-
     socket.on('ws_error', (err) => {
-      alert(err.message);
+      toast.error(err.message);
+      if (err.code === 'MODERATION_ERROR') {
+        onMessage({
+          role: 'assistant',
+          message: '❌ The message has not passed moderation.',
+        });
+        return;
+      }
+
       onMessage({
         role: 'assistant',
         message: `ERROR: ${err.message}`,
