@@ -4,6 +4,7 @@ import { FC, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import { Spinner } from '@/components/ui/spinner';
 import { Message } from '../types/message';
+import { Role } from '../enums/role';
 
 interface ChatWindowProps {
   messages: Message[];
@@ -13,7 +14,7 @@ const ChatWindow: FC<ChatWindowProps> = ({ messages }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const showSpinner =
-    messages.length > 0 && messages[messages.length - 1].role === undefined;
+    messages.length > 0 && messages[messages.length - 1].role === Role.user;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
