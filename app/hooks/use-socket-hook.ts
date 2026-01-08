@@ -28,6 +28,10 @@ export function useSocket(url: string, onMessage: (msg: Message) => void) {
 
     socket.on('ws_error', (err) => {
       alert(err.message);
+      onMessage({
+        role: 'assistant',
+        message: `ERROR: ${err.message}`,
+      });
     });
 
     socket.on('message_created', (data: Message) => {
