@@ -8,7 +8,7 @@ Locally
 
 2. Create a .env file with your OpenAI key:
 
-API_KEY=your_api_key
+NEXT_PUBLIC_API_KEY=your_api_key
 
 3. Install dependencies and start Next.js:
 
