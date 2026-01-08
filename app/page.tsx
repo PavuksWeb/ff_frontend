@@ -20,10 +20,8 @@ export default function Page() {
     (msg: Message, isNew: boolean) => {
       setMessages((prev) => {
         if (isNew) {
-          // Добавляем новое сообщение в список
           return [...prev, msg];
         } else {
-          // Находим последнее сообщение и дополняем его текст
           const lastMessage = prev[prev.length - 1];
           const updatedLast = {
             ...lastMessage,
