@@ -31,7 +31,7 @@ export function useSocket(
         onMessage(
           {
             role: Role.assistant,
-            message: '❌ The message has not passed moderation.',
+            text: '❌ The message has not passed moderation.',
           },
           true
         );
@@ -41,7 +41,7 @@ export function useSocket(
       onMessage(
         {
           role: Role.assistant,
-          message: `ERROR: ${err.message}`,
+          text: `ERROR: ${err.message}`,
         },
         true
       );
@@ -50,9 +50,9 @@ export function useSocket(
     socket.on('message_stream', (chunk: string) => {
       if (!isStreaming) {
         isStreaming = true;
-        onMessage({ role: Role.assistant, message: chunk }, true);
+        onMessage({ role: Role.assistant, text: chunk }, true);
       } else {
-        onMessage({ role: Role.assistant, message: chunk }, false);
+        onMessage({ role: Role.assistant, text: chunk }, false);
       }
     });
 
@@ -65,8 +65,8 @@ export function useSocket(
     };
   }, []);
 
-  const sendMessage = (message: string, role: Role.user) => {
-    socketRef.current?.emit('send_message', { message, role });
+  const sendMessage = (text: string, role: Role.user) => {
+    socketRef.current?.emit('send_message', { text, role });
   };
 
   return { sendMessage };

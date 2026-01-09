@@ -1,6 +1,6 @@
 import { Role } from '../enums/role';
 
 export interface Message {
-  message: string;
+  text: string;
   role: Role;
 }

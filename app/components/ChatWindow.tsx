@@ -23,7 +23,7 @@ const ChatWindow: FC<ChatWindowProps> = ({ messages }) => {
   return (
     <div className="flex-1 overflow-y-auto p-4 rounded-lg">
       {messages.map((msg, i) => (
-        <ChatMessage message={msg.message} role={msg.role} key={i} />
+        <ChatMessage message={msg.text} role={msg.role} key={i} />
       ))}
 
       {showSpinner && (

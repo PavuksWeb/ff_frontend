@@ -11,7 +11,7 @@ export default function Page() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: Role.assistant,
-      message: 'Wanna talk, sweetie?)',
+      text: 'Wanna talk, sweetie?)',
     },
   ]);
 
@@ -25,7 +25,7 @@ export default function Page() {
           const lastMessage = prev[prev.length - 1];
           const updatedLast = {
             ...lastMessage,
-            message: lastMessage.message + msg.message,
+            text: lastMessage.text + msg.text,
           };
           return [...prev.slice(0, -1), updatedLast];
         }
@@ -34,7 +34,7 @@ export default function Page() {
   );
 
   const handleSend = (message: string) => {
-    const userMessage: Message = { message, role: Role.user };
+    const userMessage: Message = { text: message, role: Role.user };
     setMessages((prev) => [...prev, userMessage]);
 
     sendMessage(message, Role.user);
