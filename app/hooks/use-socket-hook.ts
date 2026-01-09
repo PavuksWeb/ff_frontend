@@ -14,6 +14,12 @@ export function useSocket(
 ) {
   const socketRef = useRef<Socket | null>(null);
 
+  const onMessageRef = useRef(onMessage);
+
+  useEffect(() => {
+    onMessageRef.current = onMessage;
+  });
+
   useEffect(() => {
     let isStreaming = false;
     const socket = io(url, { transports: ['websocket'] });
@@ -30,7 +36,7 @@ export function useSocket(
     socket.on('ws_error', (err) => {
       toast.error(err.message || unknownMessageText);
       if (err.code === 'MODERATION_BLOCKED') {
-        onMessage(
+        onMessageRef.current(
           {
             role: Role.assistant,
             text: moderationErrorText,
@@ -40,7 +46,7 @@ export function useSocket(
         return;
       }
 
-      onMessage(
+      onMessageRef.current(
         {
           role: Role.assistant,
           text: `ERROR: ${err.message}`,
@@ -52,9 +58,9 @@ export function useSocket(
     socket.on('message_stream', (chunk: string) => {
       if (!isStreaming) {
         isStreaming = true;
-        onMessage({ role: Role.assistant, text: chunk }, true);
+        onMessageRef.current({ role: Role.assistant, text: chunk }, true);
       } else {
-        onMessage({ role: Role.assistant, text: chunk }, false);
+        onMessageRef.current({ role: Role.assistant, text: chunk }, false);
       }
     });
 
@@ -65,7 +71,7 @@ export function useSocket(
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [url]);
 
   const sendMessage = (text: string, role: Role.user) => {
     socketRef.current?.emit('send_message', { text, role });

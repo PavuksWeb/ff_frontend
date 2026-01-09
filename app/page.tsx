@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import ChatWindow from './components/ChatWindow';
 import ChatInput from './components/ChatInput';
 import { useSocket } from './hooks/use-socket-hook';
@@ -17,24 +17,23 @@ export default function Page() {
     },
   ]);
 
-  const { sendMessage } = useSocket(
-    getApiUrl(),
-    (msg: Message, isNew: boolean) => {
-      setMessages((prev) => {
-        if (isNew) {
-          return [...prev, msg];
-        } else {
-          const lastMessage = prev[prev.length - 1];
-          if (!lastMessage) return prev;
-          const updatedLast = {
-            ...lastMessage,
-            text: lastMessage.text + msg.text,
-          };
-          return [...prev.slice(0, -1), updatedLast];
-        }
-      });
-    }
-  );
+  const handleOnMessage = useCallback((msg: Message, isNew: boolean) => {
+    setMessages((prev) => {
+      if (isNew) {
+        return [...prev, msg];
+      } else {
+        const lastMessage = prev[prev.length - 1];
+        if (!lastMessage) return prev;
+        const updatedLast = {
+          ...lastMessage,
+          text: lastMessage.text + msg.text,
+        };
+        return [...prev.slice(0, -1), updatedLast];
+      }
+    });
+  }, []);
+
+  const { sendMessage } = useSocket(getApiUrl(), handleOnMessage);
 
   const handleSend = (message: string) => {
     const userMessage: Message = { text: message, role: Role.user };
