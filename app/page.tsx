@@ -4,25 +4,28 @@ import { useState } from 'react';
 import ChatWindow from './components/ChatWindow';
 import ChatInput from './components/ChatInput';
 import { useSocket } from './hooks/use-socket-hook';
-import { Role } from './enums/role';
+import { Role } from './types/role';
 import { Message } from './types/message';
+import { initMessage } from './constants/initMessage';
+import { getApiUrl } from './utils/getApiUrl';
 
 export default function Page() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: Role.assistant,
-      text: 'Wanna talk, sweetie?)',
+      text: initMessage,
     },
   ]);
 
   const { sendMessage } = useSocket(
-    process.env.NEXT_PUBLIC_API_URL as string,
+    getApiUrl(),
     (msg: Message, isNew: boolean) => {
       setMessages((prev) => {
         if (isNew) {
           return [...prev, msg];
         } else {
           const lastMessage = prev[prev.length - 1];
+          if (!lastMessage) return prev;
           const updatedLast = {
             ...lastMessage,
             text: lastMessage.text + msg.text,

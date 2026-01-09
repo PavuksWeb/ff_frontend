@@ -1,4 +1,4 @@
-import { Role } from '../enums/role';
+import { Role } from './role';
 
 export interface Message {
   text: string;

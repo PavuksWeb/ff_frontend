@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Role } from '../enums/role';
+import { Role } from '../types/role';
 
 interface ChatMessageProps {
   message: string;

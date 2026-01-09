@@ -3,8 +3,10 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { toast } from 'sonner';
-import { Role } from '../enums/role';
+import { Role } from '../types/role';
 import { Message } from '../types/message';
+import { moderationErrorText } from '../constants/moderationErrorText';
+import { unknownMessageText } from '../constants/unknownErrorText';
 
 export function useSocket(
   url: string,
@@ -26,12 +28,12 @@ export function useSocket(
     });
 
     socket.on('ws_error', (err) => {
-      toast.error(err.message || 'Something went wrong');
+      toast.error(err.message || unknownMessageText);
       if (err.code === 'MODERATION_BLOCKED') {
         onMessage(
           {
             role: Role.assistant,
-            text: '❌ The message has not passed moderation.',
+            text: moderationErrorText,
           },
           true
         );

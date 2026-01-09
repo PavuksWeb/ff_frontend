@@ -4,7 +4,7 @@ import { FC, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import { Spinner } from '@/components/ui/spinner';
 import { Message } from '../types/message';
-import { Role } from '../enums/role';
+import { Role } from '../types/role';
 
 interface ChatWindowProps {
   messages: Message[];
